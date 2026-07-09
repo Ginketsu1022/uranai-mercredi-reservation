@@ -32,7 +32,15 @@ export default function ConfirmPage() {
 </div>
 
         <button
-          style={{
+  onClick={async () => {
+    const res = await fetch("/api/calendar", {
+      method: "POST",
+    });
+
+    const data = await res.json();
+    console.log(data);
+  }}
+  style={{
             padding: "16px",
             borderRadius: "12px",
             border: "none",

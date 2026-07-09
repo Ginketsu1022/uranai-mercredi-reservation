@@ -1,8 +1,6 @@
 import NextAuth from "next-auth";
 import Google from "next-auth/providers/google";
 
-
-
 export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
     Google({
@@ -19,4 +17,27 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
     }),
   ],
+
+  callbacks: {
+    async jwt({ token, account }) {
+      console.log("account =", account);
+
+      if (account) {
+        console.log("account.access_token =", account.access_token);
+        token.accessToken = account.access_token;
+      }
+
+      return token;
+    },
+
+    async session({ session, token }) {
+      console.log("token.accessToken =", token.accessToken);
+
+      session.accessToken = token.accessToken as string | undefined;
+
+      console.log("session.accessToken =", session.accessToken);
+
+      return session;
+    },
+  },
 });
