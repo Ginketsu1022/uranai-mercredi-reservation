@@ -34,8 +34,12 @@ export default function ConfirmPage() {
         <button
   onClick={async () => {
     const res = await fetch("/api/calendar", {
-      method: "POST",
-    });
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify(reservation),
+});
 
     const data = await res.json();
     console.log(data);

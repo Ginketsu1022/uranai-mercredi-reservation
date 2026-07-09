@@ -2,7 +2,7 @@ import { google } from "googleapis";
 import { auth } from "@/auth";
 import { NextResponse } from "next/server";
 
-export async function POST() {
+export async function POST(request: Request) {
   console.log("APIが呼ばれた！");
 
   const session = await auth();
@@ -28,12 +28,26 @@ const calendar = google.calendar({
   auth: oauth2Client,
 });
 
+const reservation = await request.json();
+
+console.log("========== 予約データ ==========");
+console.log(reservation);
+console.log("================================");
+
 try {
   const result = await calendar.events.insert({
     calendarId: "primary",
     requestBody: {
-      summary: "Project Torch テスト予約",
-      start: {
+  summary: `${reservation.name}様　タロット鑑定`,
+
+  description:
+    `お名前：${reservation.name}
+
+メール：${reservation.email}
+
+鑑定時間：${reservation.duration}分`,
+
+  start: {
         dateTime: "2026-07-15T13:00:00+09:00",
       },
       end: {
