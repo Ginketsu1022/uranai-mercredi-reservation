@@ -30,11 +30,6 @@ console.log("accessToken =", session?.accessToken);
     access_token: session.accessToken,
   });
 
-const tokenInfo = await oauth2Client.getTokenInfo(session.accessToken!);
-
-console.log("===== Token Info =====");
-console.log(tokenInfo);
-
   const calendar = google.calendar({
     version: "v3",
     auth: oauth2Client,
