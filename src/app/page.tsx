@@ -51,20 +51,23 @@ export default function Home() {
   予約する
 </Link>
 
-        <button
-          style={{
-            width: "100%",
-            padding: "16px",
-            fontSize: "18px",
-            borderRadius: "12px",
-            border: "1px solid #475569",
-            background: "transparent",
-            color: "white",
-            cursor: "pointer",
-          }}
-        >
-          予約状況を見る
-        </button>
+        <Link
+  href="/status"
+  style={{
+    display: "block",
+    width: "100%",
+    padding: "16px",
+    fontSize: "18px",
+    borderRadius: "12px",
+    border: "1px solid #475569",
+    background: "transparent",
+    color: "white",
+    textAlign: "center",
+    textDecoration: "none",
+  }}
+>
+  予約状況を見る
+</Link>
       </div>
     </main>
   );
