@@ -9,8 +9,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
       authorization: {
         params: {
-          scope:
-          [
+          scope: [
             "openid",
             "email",
             "profile",
@@ -26,25 +25,17 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
   callbacks: {
     async jwt({ token, account }) {
-      console.log("account =", account);
-
       if (account) {
-  console.log("account.access_token =", account.access_token);
-  console.log("account.refresh_token =", account.refresh_token);
-  console.log("account.expires_at =", account.expires_at);
-
-  token.accessToken = account.access_token;
-}
+        token.accessToken = account.access_token;
+        token.refreshToken = account.refresh_token;
+        token.expiresAt = account.expires_at;
+      }
 
       return token;
     },
 
     async session({ session, token }) {
-      console.log("token.accessToken =", token.accessToken);
-
       session.accessToken = token.accessToken as string | undefined;
-
-      console.log("session.accessToken =", session.accessToken);
 
       return session;
     },
