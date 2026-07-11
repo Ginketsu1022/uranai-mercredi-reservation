@@ -79,6 +79,8 @@ useEffect(() => {
   const start = new Date(event.start.dateTime);
   const end = new Date(event.end.dateTime);
 
+  end.setMinutes(end.getMinutes() + 10);
+
   const times: string[] = [];
 
   const current = new Date(start);

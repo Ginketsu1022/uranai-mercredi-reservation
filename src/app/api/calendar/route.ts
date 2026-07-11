@@ -28,7 +28,8 @@ oauth2Client.setCredentials({
 });
 
 const tokenInfo = await oauth2Client.getTokenInfo(session.accessToken!);
-console.log("===== Token Info =====");
+
+console.log("===== Calendar Token Info =====");
 console.log(tokenInfo);
 
 const calendar = google.calendar({
@@ -53,25 +54,71 @@ end.setMinutes(end.getMinutes() + reservation.duration);
 
 const price = getPrice(reservation.duration);
 
+const mapUrl =
+  "https://www.google.com/maps/place/Ikarumin/@34.6050018,135.7265829,15z/data=!4m6!3m5!1s0x60012f3b18fdce35:0xd2d4c6668dfaacb7!8m2!3d34.6027137!4d135.7245585!16s%2Fg%2F11l37hqvpf?authuser=0&entry=ttu&g_ep=EgoyMDI2MDcwOC4wIKXMDSoASAFQAw%3D%3D";
+
+const weekdays = ["日", "月", "火", "水", "木", "金", "土"];
+
+const formattedDate = `${start.getFullYear()}年${start.getMonth() + 1}月${start.getDate()}日（${weekdays[start.getDay()]}）`;
+
+const formattedTime =
+  `${start.toLocaleTimeString("ja-JP", {
+    hour: "2-digit",
+    minute: "2-digit",
+  })}～${end.toLocaleTimeString("ja-JP", {
+    hour: "2-digit",
+    minute: "2-digit",
+  })}`;
+
 const subject = "【予約確認】占いメルクルディ";
 const encodedSubject = `=?UTF-8?B?${Buffer.from(subject).toString("base64")}?=`;
 
 const body = `${reservation.name} 様
 
-ご予約ありがとうございます。
+この度はご予約いただき、
+ありがとうございます。
 
-──────────────
+────────────────
 
-お名前：${reservation.name}
-日時：${reservation.date} ${reservation.time}
-鑑定時間：${reservation.duration}分
-料金：${price.toLocaleString()}円
+【ご予約内容】
 
-──────────────
+日時
+${formattedDate}
+${formattedTime}
 
-当日はお気をつけてお越しください。
+鑑定時間
+${reservation.duration}分
+
+料金
+${price.toLocaleString()}円
+
+場所
+Ikarumin 2F
+
+〒636-0142
+奈良県生駒郡斑鳩町小吉田1-10-24
+
+Googleマップはこちら
+${mapUrl}
+
+※タップすると地図が開きます。
+
+────────────────
+
+当日は開始5分前を目安に
+お越しください。
+
+ご予約の変更・キャンセルは
+このメールへの返信、
+またはInstagramのDMより
+ご連絡ください。
+
+お話しできるのを楽しみにしております。
+どうぞお氣をつけてお越しくださいませ。
+────────────────
 
 ちいさなほのお
+
 銀潔
 `;
 
