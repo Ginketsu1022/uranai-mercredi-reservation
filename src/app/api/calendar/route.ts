@@ -140,13 +140,11 @@ try {
   const result = await calendar.events.insert({
     calendarId: "primary",
     requestBody: {
-  summary: `${reservation.name}様　タロット鑑定`,
+  summary: `${reservation.name}様　【タロット鑑定】`,
 
   description:
     `お名前：${reservation.name}
-
-${reservation.email ? `メール：${reservation.email}\n\n` : ""}
-
+${reservation.email ? `メール：${reservation.email}` : ""}
 鑑定時間：${reservation.duration}分`,
 
   start: {
