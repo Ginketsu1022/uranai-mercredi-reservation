@@ -181,7 +181,7 @@ end: {
   );
 }
 
-    return NextResponse.json({
-    events: events.data.items,
+  return NextResponse.json({
+    message: "Calendar API 接続成功",
   });
 }
