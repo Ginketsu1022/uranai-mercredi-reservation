@@ -51,15 +51,19 @@ try {
   console.log("===== Events =====");
   console.log(events.data.items);
 
-  return NextResponse.json({
-    reservedTimes: events.data.items,
+    return NextResponse.json({
+    events: events.data.items,
   });
 
 } catch (error) {
-  console.error("Calendar Error:", error);
+  console.error("===== Calendar Error =====");
+  console.error(error);
 
   return NextResponse.json(
-    { error: "Calendar API Error" },
+    {
+      error: "Calendar API Error",
+      detail: String(error),
+    },
     { status: 500 }
   );
 }}
