@@ -84,7 +84,7 @@ export default function StatusPage() {
                   fontSize: 24,
                 }}
               >
-                {r.title.replace("　【タロット鑑定】", "")}
+                {r.title.replace(/[\s　]*【?タロット鑑定】?/g, "").trim()}
               </h2>
 
               <p
