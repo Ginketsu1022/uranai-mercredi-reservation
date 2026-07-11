@@ -16,23 +16,29 @@ export default function StatusPage() {
   useEffect(() => {
     async function loadReservations() {
       try {
-        const today = new Date().toISOString().slice(0, 10);
+        const today = "2026-07-22";
 
         const res = await fetch(
           `/api/calendar/events?date=${today}`
         );
+
+        console.log("HTTP Status:", res.status);
+        console.log("Response URL:", res.url);
+
         const data = await res.json();
 
-console.log(data);
+        console.log("Response Data:", data);
 
-const reservations = (data.events ?? []).map((event: any) => ({
-  id: event.id,
-  title: event.summary,
-  start: event.start?.dateTime ?? "",
-  end: event.end?.dateTime ?? "",
-}));
+        const reservations = (data.events ?? []).map((event: any) => ({
+          id: event.id,
+          title: event.summary,
+          start: event.start?.dateTime ?? "",
+          end: event.end?.dateTime ?? "",
+        }));
 
-setReservations(reservations);
+        console.log("Reservations:", reservations);
+
+        setReservations(reservations);
       } catch (err) {
         console.error(err);
       } finally {
