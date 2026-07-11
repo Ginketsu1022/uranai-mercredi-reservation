@@ -1,7 +1,9 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useReservationStore } from "@/store/reservationStore";
 export default function ConfirmPage() {
+  const router = useRouter();
   const { reservation } = useReservationStore();
   return (
     <main
@@ -42,7 +44,10 @@ export default function ConfirmPage() {
 });
 
     const data = await res.json();
-    console.log(data);
+
+console.log(data);
+
+router.push("/complete");
   }}
   style={{
             padding: "16px",

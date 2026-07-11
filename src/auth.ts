@@ -10,7 +10,13 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       authorization: {
         params: {
           scope:
-            "openid email profile https://www.googleapis.com/auth/calendar https://www.googleapis.com/auth/gmail.send",
+          [
+            "openid",
+            "email",
+            "profile",
+            "https://www.googleapis.com/auth/calendar",
+            "https://www.googleapis.com/auth/gmail.send",
+          ].join(" "),
           access_type: "offline",
           prompt: "consent",
         },
@@ -23,9 +29,12 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       console.log("account =", account);
 
       if (account) {
-        console.log("account.access_token =", account.access_token);
-        token.accessToken = account.access_token;
-      }
+  console.log("account.access_token =", account.access_token);
+  console.log("account.refresh_token =", account.refresh_token);
+  console.log("account.expires_at =", account.expires_at);
+
+  token.accessToken = account.access_token;
+}
 
       return token;
     },

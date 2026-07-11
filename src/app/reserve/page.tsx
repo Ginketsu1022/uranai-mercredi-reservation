@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { PRICE_LIST } from "@/lib/price";
 import { getAvailableTimes } from "@/lib/schedule";
@@ -56,9 +56,90 @@ export default function ReservePage() {
     time: "",
   });
 
+const [reservedTimes, setReservedTimes] = useState<string[]>([]);
+
+useEffect(() => {
+  if (!reservation.date) return;
+
+  async function fetchReservedTimes() {
+    const response = await fetch(
+      `/api/calendar/events?date=${reservation.date}`
+    );
+
+    const data = await response.json();
+
+    if (!response.ok) {
+     console.error(data);
+     return;
+    }
+
+    const reserved = data.reservedTimes.flatMap((event: any) => {
+  console.log(event.start.dateTime, event.end.dateTime);
+
+  const start = new Date(event.start.dateTime);
+  const end = new Date(event.end.dateTime);
+
+  const times: string[] = [];
+
+  const current = new Date(start);
+
+  while (current < end) {
+    times.push(
+      current.toLocaleTimeString("ja-JP", {
+        hour: "2-digit",
+        minute: "2-digit",
+        timeZone: "Asia/Tokyo",
+      })
+    );
+
+    current.setMinutes(current.getMinutes() + 10);
+  }
+
+  return times;
+});
+
+setReservedTimes(reserved);
+
+console.log("予約済み", reserved);
+
+console.log("予約済み", reserved);
+  }
+
+  fetchReservedTimes();
+}, [reservation.date]);
+
+function isOverlapping(
+  startTime: string,
+  duration: number,
+  reservedTimes: string[]
+) {
+  const [hour, minute] = startTime.split(":").map(Number);
+
+  const start = hour * 60 + minute;
+  const end = start + duration;
+
+  for (const reserved of reservedTimes) {
+    const [h, m] = reserved.split(":").map(Number);
+    const reservedMinute = h * 60 + m;
+
+    if (reservedMinute >= start && reservedMinute < end) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
   const availableTimes = useMemo(() => {
-    return getAvailableTimes(reservation.duration);
-  }, [reservation.duration]);
+  return getAvailableTimes(reservation.duration).filter(
+    (time) =>
+      !isOverlapping(
+        time,
+        reservation.duration,
+        reservedTimes
+      )
+  );
+}, [reservation.duration, reservedTimes]);
 
   const handleChange = (
   key: keyof Reservation,
@@ -82,7 +163,7 @@ export default function ReservePage() {
           <input
             style={inputStyle}
             type="text"
-            placeholder="山田 太郎"
+            placeholder="氏名 または ニックネーム"
             value={reservation.name}
             onChange={(e) => handleChange("name", e.target.value)}
           />
@@ -93,7 +174,7 @@ export default function ReservePage() {
           <input
             style={inputStyle}
             type="email"
-            placeholder="example@email.com"
+            placeholder="予約確認メールをご希望の場合のみ入力"
             value={reservation.email}
             onChange={(e) => handleChange("email", e.target.value)}
           />
@@ -120,7 +201,18 @@ export default function ReservePage() {
   ))}
 </select>
         </label>
+       
+        <label>
+          <div style={{ marginBottom: "8px" }}>予約日</div>
 
+          <input
+            style={inputStyle}
+            type="date"
+            value={reservation.date}
+            onChange={(e) => handleChange("date", e.target.value)}
+              />
+        </label>
+       
         <label>
           <div style={{ marginBottom: "8px" }}>開始時間</div>
 
@@ -140,6 +232,21 @@ export default function ReservePage() {
         </label><button
   style={buttonStyle}
   onClick={() => {
+  if (!reservation.name.trim()) {
+    alert("お名前を入力してください");
+    return;
+  }
+
+if (!reservation.date) {
+  alert("予約日を選択してください");
+  return;
+}
+
+if (!reservation.time) {
+  alert("開始時間を選択してください");
+  return;
+}
+
   setReservation(reservation);
   router.push("/confirm");
 }}
