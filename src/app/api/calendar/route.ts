@@ -50,7 +50,26 @@ console.log("================================");
 const start = new Date(`${reservation.date}T${reservation.time}:00`);
 
 const end = new Date(start);
+
 end.setMinutes(end.getMinutes() + reservation.duration);
+
+const existingEvents = await calendar.events.list({
+  calendarId: "primary",
+  singleEvents: true,
+  timeMin: start.toISOString(),
+  timeMax: end.toISOString(),
+});
+
+if ((existingEvents.data.items?.length ?? 0) > 0) {
+  return NextResponse.json(
+    {
+      error: "この時間はすでに予約されています",
+    },
+    {
+      status: 409,
+    }
+  );
+}
 
 const price = getPrice(reservation.duration);
 
