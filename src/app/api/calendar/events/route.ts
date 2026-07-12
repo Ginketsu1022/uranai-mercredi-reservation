@@ -18,13 +18,18 @@ export async function GET(request: Request) {
     "chii.hono.official@gmail.com"
   );
 
-  const url =
-    `https://www.googleapis.com/calendar/v3/calendars/${calendarId}/events` +
-    `?key=${process.env.GOOGLE_API_KEY}` +
-    `&singleEvents=true` +
-    `&orderBy=startTime` +
-    `&timeMin=${targetDate}T00:00:00+09:00` +
-    `&timeMax=${targetDate}T23:59:59+09:00`;
+  const params = new URLSearchParams({
+  key: process.env.GOOGLE_API_KEY!,
+  singleEvents: "true",
+  orderBy: "startTime",
+  timeMin: `${targetDate}T00:00:00+09:00`,
+  timeMax: `${targetDate}T23:59:59+09:00`,
+});
+
+const url =
+  `https://www.googleapis.com/calendar/v3/calendars/${calendarId}/events?${params}`;
+  
+  console.log(url);
 
   const response = await fetch(url);
 
