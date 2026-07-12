@@ -27,11 +27,6 @@ oauth2Client.setCredentials({
   access_token: session.accessToken,
 });
 
-const tokenInfo = await oauth2Client.getTokenInfo(session.accessToken!);
-
-console.log("===== Calendar Token Info =====");
-console.log(tokenInfo);
-
 const calendar = google.calendar({
   version: "v3",
   auth: oauth2Client,
