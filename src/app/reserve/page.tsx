@@ -237,24 +237,29 @@ function isOverlapping(
         </label><button
   style={buttonStyle}
   onClick={() => {
-  if (!reservation.name.trim()) {
-    alert("お名前を入力してください");
-    return;
-  }
+    if (!reservation.name.trim()) {
+      alert("お名前を入力してください");
+      return;
+    }
 
-if (!reservation.date) {
-  alert("予約日を選択してください");
-  return;
-}
+    if (!reservation.date) {
+      alert("予約日を選択してください");
+      return;
+    }
 
-if (!reservation.time) {
-  alert("開始時間を選択してください");
-  return;
-}
+    if (!reservation.time) {
+      alert("開始時間を選択してください");
+      return;
+    }
 
-  setReservation(reservation);
-  router.push("/confirm");
-}}
+    console.log("保存前", reservation);
+
+    setReservation(reservation);
+
+    console.log("保存後", useReservationStore.getState().reservation);
+
+    router.push("/confirm");
+  }}
 >
   予約内容を確認する
 </button>

@@ -5,6 +5,8 @@ import { useReservationStore } from "@/store/reservationStore";
 export default function ConfirmPage() {
   const router = useRouter();
   const { reservation } = useReservationStore();
+
+  console.log("Confirm reservation:", reservation);
   return (
     <main
       style={{
