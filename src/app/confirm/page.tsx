@@ -1,7 +1,10 @@
 "use client";
 
+console.log("★★★★★ CONFIRM PAGE LOADED ★★★★★");
+
 import { useRouter } from "next/navigation";
 import { useReservationStore } from "@/store/reservationStore";
+
 export default function ConfirmPage() {
   const router = useRouter();
   const { reservation } = useReservationStore();
