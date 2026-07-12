@@ -68,6 +68,9 @@ useEffect(() => {
 
     const data = await response.json();
 
+    console.log("APIから取得", data);
+    console.log(data.reservedTimes);
+
     if (!response.ok) {
      console.error(data);
      return;
